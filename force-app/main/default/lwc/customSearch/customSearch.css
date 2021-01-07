@@ -1,0 +1,34 @@
+.custom-search-full-height {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;                                                        
+    right: 0;
+}
+.custom-search-full-height .slds-card {
+    height: 100% !important;
+}
+.doneButton .slds-button {
+    width: 100px !important;
+}
+.edit-filter-panel {
+    opacity: 1; 
+    display: block; 
+    z-index: 9001; 
+    position: absolute; 
+    visibility: visible;
+}
+.hasBeenEdited .slds-filters__item, .hasBeenEdited .slds-filters__item:hover {
+    background-color: #faffbd !important;
+}
+.filterValue .slds-button.slds-radio_button {
+    width: 50%;
+    text-align: center;
+}
+.filterValue .slds-radio_button__label {
+    width: 100%;
+}
+
+.slds-scrollable_y, .slds-scrollable--y {
+    width: 100% !important;
+}

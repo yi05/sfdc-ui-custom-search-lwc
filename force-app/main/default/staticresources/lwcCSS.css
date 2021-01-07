@@ -1,0 +1,91 @@
+/* making \n as the line breaker on toast message */
+.toastMessage.forceActionsText{
+	white-space : pre-line !important;
+}
+
+/* custom search page */
+.custom-search-full-height .slds-card {
+    height: 100% !important;
+}
+.filterValue .slds-radio_button-group {
+    width: 100%;
+}
+.filterValue .slds-button.slds-radio_button {
+    width: 50%;
+    text-align: center;
+}
+.filterValue .slds-radio_button__label {
+    width: 100%;
+}
+.filterValue .slds-picklist .slds-dropdown {
+    width: 100%;
+}
+.custom-search-full-height .slds-scrollable_y, .slds-scrollable--y {
+    width: 100% !important;
+}
+
+/* call cycle form */
+.bn-w170 button, .bn-w170 a {
+    width: 170px;
+}
+
+.flowScreen .slds-card {
+    margin: -2em;
+}
+.flowScreen .slds-card__header {
+    display: none;
+}
+
+
+/* styling for selecting activity / contact / button, used in call cycle form etc.*/
+.bn-box  {
+    /* transition: .5s ease; */
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.bn-box:hover, .bn-box-selected{
+    /* -webkit-animation: shadow-drop-2-center 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both; */
+    /* animation: shadow-drop-2-center 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both; */
+    
+    -webkit-box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.35);
+}
+
+.bn-box-selected{
+    /* -webkit-animation: shadow-drop-2-center 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both; */
+    /* animation: shadow-drop-2-center 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both; */
+    border-width: 1px;
+    border-style: solid;
+    border-color: #1e1e1e;
+}
+
+@-webkit-keyframes shadow-drop-2-center {
+    0% {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        -webkit-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+    100% {
+        -webkit-transform: translateZ(50px);
+        transform: translateZ(50px);
+        -webkit-box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.35);
+        box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.35);
+    }
+}
+@keyframes shadow-drop-2-center {
+    0% {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        -webkit-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+    100% {
+        -webkit-transform: translateZ(50px);
+        transform: translateZ(50px);
+        -webkit-box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.35);
+        box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.35);
+    }
+}

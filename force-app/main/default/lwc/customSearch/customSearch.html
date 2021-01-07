@@ -1,0 +1,190 @@
+<template>
+    <div class="custom-search-full-height">
+        <article class="slds-card">
+            <!-- card header -->
+            <div class="slds-page-header">
+                <div class="slds-page-header__row">
+                    <div class="slds-page-header__col-title">
+                        <div class="slds-media">
+                            <div class="slds-media__figure">
+                                <lightning-icon icon-name={cmpIconName}></lightning-icon>
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-page-header__name">
+                                    <div class="slds-page-header__name-title">
+                                        <h1>
+                                            <span>{objectLabelPlural}</span>
+                                            <span class="slds-page-header__title slds-truncate" title="Advanced Search">Advanced Search</span>
+                                        </h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-page-header__col-actions">
+                        <div class="slds-page-header__col-controls">
+                            <div class="slds-page-header__controls">
+                                <div class="slds-page-header__control">
+                                    <lightning-button-icon icon-name="utility:filterList" alternative-text="Toggle filters" title="Toggle filters" onclick={toggleFiltersPane} variant={showFilterButtonVariant} size="medium"></lightning-button-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- card body -->
+            <div class="slds-card__body" style="margin: 0;">
+                <lightning-layout vertical-align="stretch" class="table-and-filters" style={tableAndFiltersStyle}>
+                    <!-- data table -->
+                    <lightning-layout-item size={datatableLayoutSize}>
+                        <lightning-datatable
+                        class="datatable"
+                        key-field="Id"
+                        data={data}
+                        columns={columns}
+                        onsave={handleDataTableSave}
+                        onsort={handleDataTableSort}
+                        sorted-by={sortBy}
+                        sorted-direction={sortDirection}
+                        enable-infinite-loading
+                        onloadmore={handleDataTableLoadMore}></lightning-datatable>
+                        
+                        <lightning-spinner if:true={loading}></lightning-spinner>
+                    </lightning-layout-item>
+                    <!-- filters -->
+                    <lightning-layout-item size="2" if:true={filtersPaneOpen}>
+
+                        <div class="slds-grid slds-no-flex slds-panel slds-panel_docked slds-panel_docked-right slds-is-open" aria-hidden="false" style="">
+                            <div class="slds-panel__header">
+                                <template if:false={hasUnsavedFiltersFlag}>
+                                    <h2 class="slds-panel__header-title slds-text-heading_small slds-truncate" title="Filters">Filters</h2>
+                                    <lightning-button-icon icon-name="utility:close" alternative-text="Close filters" title="Close filters" onclick={toggleFiltersPane}></lightning-button-icon>
+                                </template>
+                                <template if:true={hasUnsavedFiltersFlag}>
+                                    <lightning-button label="Cancel" variant="neutral" title="Cancel" onclick={removeUnsavedFilters}></lightning-button>
+                                    <div class="slds-grid slds-col slds-grid_align-end">
+                                        <lightning-button label="Save" variant="brand" title="Save" onclick={saveUnsavedFilters}></lightning-button>
+                                    </div>
+                                </template>                                
+                            </div>
+                            <div class="slds-panel__body">
+                                <!-- filters list -->
+                                <ol class="slds-list_vertical slds-list_vertical-space">
+                                    <template for:each={filters} for:item="filter">
+                                        <li key={filter.index} class="slds-item slds-hint-parent">
+                                            <div class={filter.class}>
+                                                <div class="slds-filters__item slds-grid slds-grid_vertical-align-center">
+                                                    <button class="slds-button_reset slds-grow slds-has-blur-focus" onclick={editFilter} data-index={filter.index}>
+                                                        <span class="slds-show slds-text-body_small slds-text-color_weak">{filter.label}</span>
+                                                        <span class="slds-show">
+                                                            <template if:true={filter.operator}>{filter.operator}&nbsp;</template>
+                                                            <template if:false={filter.operator}>&nbsp;</template>
+                                                            <template if:true={filter.isDate}>
+                                                                <lightning-formatted-date-time value={filter.value}></lightning-formatted-date-time>
+                                                            </template>
+                                                            <template if:false={filter.isDate}>
+                                                                {filter.value}
+                                                            </template>
+                                                            </span>
+                                                    </button>    
+                                            
+                                                    <template if:false={filter.isLocked}>
+                                                        <lightning-button-icon icon-name="utility:close" variant="bare" alternative-text="Remove filter" onclick={removeFilter} value={filter.index}></lightning-button-icon>
+                                                    </template>
+                                                    <template if:true={filter.isLocked}>
+                                                        <lightning-button-icon icon-name="utility:lock" variant="bare" alternative-text="Locked filter"></lightning-button-icon>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </template>
+                                </ol>
+
+                                <!-- buttons to add filter / remove all filters -->
+                                <div class="slds-filters__footer slds-grid slds-shrink-none">
+                                    <button class="slds-button_reset slds-text-link" onclick={addFilter}>Add Filter</button>
+                                    <button class="slds-button_reset slds-text-link slds-col_bump-left" onclick={removeAllFilters}>Remove All</button>
+                                  </div>
+                            </div>
+                            
+                            <!-- spinner -->
+                            <lightning-spinner if:true={loading}></lightning-spinner>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+
+
+                <!-- <div style="overflow: hidden; display: flex;"> -->
+                    <!-- content -->
+                    <!-- <div class="slds-grid slds-col slds-col-12" style="min-height: 700px; height: 700px;"> -->
+                        
+                        <!-- spinner -->
+                        <!-- <lightning-spinner if:true={loading}></lightning-spinner> -->
+                    <!-- </div> -->
+                    <!-- filters -->
+                    <!-- <template if:true={filtersPaneOpen}> -->
+                    <!-- </template> -->
+                <!-- </div> -->
+            </div>
+        </article>
+    </div>
+    
+    <template if:true={editFilterFlag}>
+        <div class="uiPanel west edit-filter-panel" style={editFilterPanelStyle}>
+            <div class="container">
+                <div class="panel-content scrollable" style="width: 400px; overflow: visible;">
+                    <!-- inputs: Field, Operator, Value -->
+                    <div class="slds-p-around_medium">
+
+                        <lightning-combobox
+                            name="filterField"
+                            class="filterField"
+                            label="Field"
+                            value={filterInEditing.label}
+                            placeholder="Select Field"
+                            options={filterFieldOptions}
+                            onchange={handleFilterFieldChange} ></lightning-combobox>
+                        <br/>
+                        <lightning-combobox
+                            name="filterOperator"
+                            class="filterOperator"
+                            label="Operator"
+                            value={filterInEditing.operator}
+                            placeholder="Select Operator"
+                            options={filterOperatorOptions}
+                            onchange={handleFilterOperatorChange} ></lightning-combobox>
+                        <br/>
+
+                        <!-- input conditional on filter field type -->
+                        <template if:true={fitlerMetaInEditing.isDate}>
+                            <lightning-input type="date" label="Value" value={filterInEditing.value} name="filterValue" class="filterValue" autocomplete="nope"></lightning-input>
+                        </template>
+                        <template if:true={fitlerMetaInEditing.isPicklist}>
+                            <c-multi-pick-list label="Value" options={picklistOptions} onitemselected={handleOnItemSelected} name="filterValue" class="filterValue" value={filterInEditing.value} rerender-value={rerenderValue}></c-multi-pick-list>
+                        </template>
+                        <template if:true={fitlerMetaInEditing.isBoolean}>
+                            <lightning-radio-group name="filterValue"
+                                label="Value"
+                                class="filterValue"
+                                options={booleanOptions}
+                                value={filterInEditing.value}
+                                type="button"></lightning-radio-group>
+                        </template>
+                        <template if:true={fitlerMetaInEditing.isReference}>
+                            <c-lookup onsearch={handleSearch} label="Value" placeholder="Search" class="filterValue" name="filterValue" search-object={fitlerMetaInEditing.referenceObj} selection={filterInEditing._lookupSelection}>
+                            </c-lookup>
+                        </template>
+                        <template if:true={fitlerMetaInEditing.isInput}>
+                            <lightning-input type="text" label="Value" value={filterInEditing.value} name="filterValue" class="filterValue"></lightning-input>
+                        </template>
+                    </div>
+                    <div class="slds-p-around_medium slds-text-align_right">
+                        <lightning-button label="Cancel" variant="neutral" title="Cancel" onclick={handleFilterCancel}  class="cancelButton slds-m-right_medium"></lightning-button>
+                        <lightning-button label="Done" variant="neutral" title="Done" onclick={handleFilterDone}  class="doneButton" style="width: 100px !important;" value={filterInEditing.index}></lightning-button>
+                    </div>
+                </div>
+            </div>
+            <div class="pointer" style="position: absolute; left: 390px; top: 143px;"></div>
+        </div>
+    </template>
+</template>

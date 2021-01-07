@@ -1,0 +1,10 @@
+{
+  "orgName": "Acme",
+  "edition": "Enterprise",
+  "features": ["ServiceCloud"],
+  "settings": {
+      "caseSettings": {
+          "systemUserEmail": "support@acme.com"
+      }
+  }
+}
